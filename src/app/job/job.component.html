@@ -33,7 +33,8 @@
                 formControlName="jobType"
                 [readonly]="true"
               />
-            </mat-form-field></td
+            </mat-form-field>
+</td
         ></ng-container>
 
         <ng-container matColumnDef="startTime">
@@ -62,6 +63,7 @@
                 formControlName="startTime"
                 [readonly]="VOForm.get('VORows')?.value[i]?.isEditable"
               />
+            <mat-error>i.e 12:30</mat-error>         
             </mat-form-field>
           </td>
         </ng-container>
@@ -92,7 +94,9 @@
                 formControlName="intervalMinutes"
                 [readonly]="VOForm.get('VORows')?.value[i]?.isEditable"
               />
+            <mat-error>Must be Integer (No Decimal)</mat-error>
             </mat-form-field>
+
           </td>
         </ng-container>
 
@@ -122,7 +126,9 @@
                 formControlName="scheduleStartDate"
                 [readonly]="VOForm.get('VORows')?.value[i]?.isEditable"
               />
+            <mat-error>Date Must be in formate YYYY-MM-DD</mat-error>
             </mat-form-field>
+
           </td>
         </ng-container>
 
@@ -152,7 +158,10 @@
                 formControlName="jobIsTimedOutMinutes"
                 [readonly]="VOForm.get('VORows')?.value[i]?.isEditable"
               />
+              <mat-error>Must be Integer (No Decimal)</mat-error>
+
             </mat-form-field>
+
           </td>
         </ng-container>
 
@@ -182,7 +191,9 @@
                 formControlName="stopTime"
                 [readonly]="VOForm.get('VORows')?.value[i]?.isEditable"
               />
+            <mat-error>i.e 12:30</mat-error>
             </mat-form-field>
+
           </td>
         </ng-container>
 
@@ -212,7 +223,9 @@
                 formControlName="stopOnSuccessYN"
                 [readonly]="VOForm.get('VORows')?.value[i]?.isEditable"
               />
+            <mat-error>Y or N</mat-error>
             </mat-form-field>
+
           </td>
         </ng-container>
 
@@ -242,7 +255,11 @@
                 formControlName="activeYN"
                 [readonly]="VOForm.get('VORows')?.value[i]?.isEditable"
               />
+              <mat-error>Y or N</mat-error>
+
+        
             </mat-form-field>
+
           </td>
         </ng-container>
 
@@ -272,7 +289,10 @@
                 formControlName="deletedYN"
                 [readonly]="VOForm.get('VORows')?.value[i]?.isEditable"
               />
+              <mat-error>Y or N</mat-error>
+
             </mat-form-field>
+
           </td>
         </ng-container>
 
