@@ -1,0 +1,261 @@
+<div>
+  <br />
+  <h1>{{pageTitle}}</h1>
+  <br />
+  <br />
+  Trace Line Count: {{jobCount}}
+  <br />
+  <br />
+</div>
+
+<!--<table>
+  <thead>
+    <tr>
+      <th>JobType</th>
+      <th>ScheduleStartDate</th>
+      <th>StartTime</th>
+      <th>JobIsTimedOutMinutes</th>
+      <th>IntervalMinutes</th>
+      <th>StopTime</th>
+      <th>StopOnSuccessYN</th>
+      <th>ActiveYN</th>
+      <th>DeletedYN</th>
+      <th>Edit</th>
+      <th>Save</th>
+      <th>Cancel</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor='let item of jobList'>
+      <td>{{ item.jobType }}</td>
+
+      <td>
+        <ng-container *ngIf="!item.editing; else editMode">
+          {{ item.scheduleStartDate }}
+        </ng-container>
+        <ng-template #editMode>
+        
+          <input type="text" [(ngModel)]="item.scheduleStartDate">
+        </ng-template>
+      </td>
+      <td>
+        <ng-container *ngIf="!item.editing; else editMode">
+          {{ item.startTime }}
+        </ng-container>
+        <ng-template #editMode>
+          <input type="text" [(ngModel)]="item.startTime">
+        </ng-template>
+      </td>
+      <td>
+        <ng-container *ngIf="!item.editing; else editMode">
+          {{ item.jobIsTimedOutMinutes }}
+        </ng-container>
+        <ng-template #editMode>
+          <input type="number" [(ngModel)]="item.jobIsTimedOutMinutes">
+        </ng-template>
+      </td>
+      <td>
+        <ng-container *ngIf="!item.editing; else editMode">
+          {{ item.intervalMinutes }}
+        </ng-container>
+        <ng-template #editMode>
+          <input type="number" [(ngModel)]="item.intervalMinutes">
+        </ng-template>
+      </td>
+      <td>
+        <ng-container *ngIf="!item.editing; else editMode">
+          {{ item.stopTime }}
+        </ng-container>
+        <ng-template #editMode>
+          <input type="text" [(ngModel)]="item.stopTime">
+        </ng-template>
+      </td>
+      <td>
+        <ng-container *ngIf="!item.editing; else editMode">
+          {{ item.stopOnSuccessYN }}
+        </ng-container>
+        <ng-template #editMode>
+          <input type="text" [(ngModel)]="item.stopOnSuccessYN">
+        </ng-template>
+      </td>
+      <td>
+        <ng-container *ngIf="!item.editing; else editMode">
+          {{ item.activeYN }}
+        </ng-container>
+        <ng-template #editMode>
+          <input type="text" [(ngModel)]="item.activeYN">
+        </ng-template>
+      </td>
+      <td>{{ item.deletedYN }}</td>
+      <td *ngIf="!item.editing"><button (click)="editRow(item)">Edit</button></td>
+      <td *ngIf="item.editing"><button (click)="saveRow(item)">Save</button></td>
+      <td *ngIf="item.editing"><button (click)="cancelEdit(item)">Cancel</button></td>
+
+    </tr>
+  </tbody>
+</table> -->
+
+
+<div class="mat-elevation-z8">
+
+  <form [formGroup]="VOForm" autocomplete="off">
+    <ng-container formArrayName="VORows">
+      <table #table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="jobType">
+          <th mat-header-cell *matHeaderCellDef> JobType </th>
+
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element; let i = index" [formGroup]="element">
+            <mat-form-field appearance="standard" style="min-width: 150px;">
+              <input matInput type="text" formControlName="jobType" [readonly]="true">
+            </mat-form-field>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="jobTypeGUID">
+          <th mat-header-cell *matHeaderCellDef> JobType </th>
+          <td mat-cell *matCellDef="let element; let i = index" [formGroup]="element">
+
+            <!-- <span [hidden]="VOForm.get('VORows')?.value?.[i]?.isEditable"> -->
+            <mat-form-field [class]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'"
+              style="min-width: 200px;"
+              [appearance]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'"
+              [class]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'"
+              [appearance]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'">
+              <input matInput type="text" formControlName="jobTypeGUID"
+                [readonly]="VOForm.get('VORows')?.value?.[i]?.isEditable">
+            </mat-form-field>
+            <!-- </span> -->
+
+          </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="startTime">
+          <th mat-header-cell *matHeaderCellDef> StartTime </th>
+          <td mat-cell *matCellDef="let element; let i = index" [formGroup]="element">
+            <!-- [class]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'" [appearance]="true ? 'outline': 'fill'" -->
+            <!-- <span [hidden]="VOForm.get('VORows')?.value?.[i]?.isEditable"> -->
+            <mat-form-field [class]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'"
+              [appearance]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'" style="min-width: 20px;">
+              <input matInput type="text" formControlName="startTime"
+                [readonly]="VOForm.get('VORows')?.value?.[i]?.isEditable">
+            </mat-form-field>
+            <!-- </span> -->
+          </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="intervalMinutes">
+          <th mat-header-cell *matHeaderCellDef> IntervalMinutes </th>
+          <td mat-cell *matCellDef="let element; let i = index" [formGroup]="element">
+            <!-- <span [hidden]="VOForm.get('VORows')?.value?.[i]?.isEditable"> -->
+            <mat-form-field [class]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'"
+              [appearance]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'">
+              <input matInput type="text" formControlName="intervalMinutes"
+                [readonly]="VOForm.get('VORows')?.value?.[i]?.isEditable">
+            </mat-form-field>
+            <!-- </span> -->
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="scheduleStartDate">
+          <th mat-header-cell *matHeaderCellDef> scheduleStartDate </th>
+          <td mat-cell *matCellDef="let element; let i = index" [formGroup]="element">
+            <!-- <span [hidden]="VOForm.get('VORows')?.value?.[i]?.isEditable"> -->
+            <mat-form-field [class]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'"
+              [appearance]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'">
+              <input matInput type="text" formControlName="scheduleStartDate"
+                [readonly]="VOForm.get('VORows')?.value?.[i]?.isEditable">
+            </mat-form-field>
+            <!-- </span> -->
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="jobIsTimedOutMinutes">
+          <th mat-header-cell *matHeaderCellDef> JobIsTimedOutMinutes </th>
+          <td mat-cell *matCellDef="let element; let i = index" [formGroup]="element">
+            <!-- <span [hidden]="VOForm.get('VORows')?.value?.[i]?.isEditable"> -->
+            <mat-form-field [class]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'"
+              [appearance]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'">
+              <input matInput type="text" formControlName="jobIsTimedOutMinutes"
+                [readonly]="VOForm.get('VORows')?.value?.[i]?.isEditable">
+            </mat-form-field>
+            <!-- </span> -->
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stopTime">
+          <th mat-header-cell *matHeaderCellDef> StopTime </th>
+          <td mat-cell *matCellDef="let element; let i = index" [formGroup]="element">
+            <!-- <span [hidden]="VOForm.get('VORows')?.value?.[i]?.isEditable"> -->
+            <mat-form-field [class]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'"
+              [appearance]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'">
+              <input matInput type="text" formControlName="stopTime"
+                [readonly]="VOForm.get('VORows')?.value?.[i]?.isEditable">
+            </mat-form-field>
+            <!-- </span> -->
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stopOnSuccessYN">
+          <th mat-header-cell *matHeaderCellDef> StopOnSuccessYN </th>
+          <td mat-cell *matCellDef="let element; let i = index" [formGroup]="element">
+            <!-- <span [hidden]="VOForm.get('VORows')?.value?.[i]?.isEditable"> -->
+            <mat-form-field [class]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'"
+              [appearance]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'">
+              <input matInput type="text" formControlName="stopOnSuccessYN"
+                [readonly]="VOForm.get('VORows')?.value?.[i]?.isEditable">
+            </mat-form-field>
+            <!-- </span> -->
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="activeYN">
+          <th mat-header-cell *matHeaderCellDef> ActiveYN </th>
+          <td mat-cell *matCellDef="let element; let i = index" [formGroup]="element">
+            <!-- <span [hidden]="VOForm.get('VORows')?.value?.[i]?.isEditable"> -->
+            <mat-form-field [class]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'"
+              [appearance]="VOForm.get('VORows')?.value?.[i]?.isEditable? 'standard' : 'outline'">
+              <input matInput type="text" formControlName="activeYN"
+                [readonly]="VOForm.get('VORows')?.value?.[i]?.isEditable">
+            </mat-form-field>
+            <!-- </span> -->
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef> Action </th>
+          <td mat-cell *matCellDef="let element; let i = index" [formGroup]="element">
+            
+            <button mat-icon-button class="material-icons app-toolbar-menu save-button" matTooltip="Save Changes"
+              (click)="SaveVO(VOForm,i)" *ngIf="!VOForm.get('VORows')?.value?.[i]?.isEditable" color="primary">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+
+            <button mat-icon-button class="material-icons app-toolbar-menu cancel-button" matTooltip="Cancel Changes"
+              color="warn" (click)="CancelSVO(VOForm,i)" *ngIf="!VOForm.get('VORows')?.value?.[i]?.isEditable">
+              <mat-icon>cancel</mat-icon>
+            </button>
+
+            <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+              *ngIf="VOForm.get('VORows')?.value?.[i]?.isEditable" matTooltip="Edit" color="primary"
+              (click)="EditSVO(VOForm,i)">
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <!-- <button mat-icon-button class="material-icons app-toolbar-menu delete-button"
+              *ngIf="VOForm.get('VORows')?.value?.[i]?.isEditable" matTooltip="Delete" color="warn">
+              <mat-icon>delete</mat-icon>
+            </button> -->
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </ng-container>
+  </form>
+</div>

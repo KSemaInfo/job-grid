@@ -1,0 +1,135 @@
+import { Component, OnInit } from '@angular/core';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+} from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
+import { IJob } from '../models/IJob';
+import { GridModel } from '../models/models';
+const ELEMENT_DATA: IJob[] = [
+  {
+    id: 1,
+    jobType: 'Job Scheduler',
+    jobTypeGUID: '9444ee53-ad48-11ed-96ed-02c30ba6082b',
+    startTime: 'Local data',
+    intervalMinutes: 109,
+    scheduleStartDate: '',
+    jobIsTimedOutMinutes: 0,
+    stopTime: '',
+    stopOnSuccessYN: '',
+    activeYN: '',
+  },
+  {
+    id: 2,
+    jobType: 'Job Runner',
+    jobTypeGUID: '9444f212-ad48-11ed-96ed-02c30ba6082b',
+    startTime: '',
+    intervalMinutes: 0,
+    scheduleStartDate: '',
+    jobIsTimedOutMinutes: 0,
+    stopTime: '',
+    stopOnSuccessYN: '',
+    activeYN: '',
+  },
+  {
+    id: 3,
+    jobType: 'Job Scheduler - Triggered',
+    jobTypeGUID: '953b8f04-ad48-11ed-96ed-02c30ba6082b',
+    startTime: '',
+    intervalMinutes: 99,
+    scheduleStartDate: '',
+    jobIsTimedOutMinutes: 0,
+    stopTime: '',
+    stopOnSuccessYN: '',
+    activeYN: '',
+  },
+];
+@Component({
+  selector: 'app-job',
+  templateUrl: './job.component.html',
+  styleUrls: ['./job.component.css'],
+})
+export class JobComponent implements OnInit {
+  pageTitle = 'Job Maintenance - Job';
+  jobList: IJob[] = [];
+  /**Use data from this list for when the Cancel button is clicked, we can restor the row data to this. */
+  originalJobList: IJob[] = [];
+  jobCount: number | undefined = 0;
+  errorMessage: string | undefined = '';
+
+  public selectedItem!: IJob;
+  public gridModel!: GridModel<IJob>;
+  displayedColumns: string[] = ['jobType', 'startTime', 'action'];
+  dataSource = new MatTableDataSource<any>();
+
+  VOForm!: FormGroup;
+  isEditableNew: boolean = true;
+  constructor(private fb: FormBuilder, private _formBuilder: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.VOForm = this._formBuilder.group({
+      VORows: this._formBuilder.array([]),
+    });
+
+    this.VOForm = this.fb.group({
+      VORows: this.fb.array(
+        ELEMENT_DATA.map((val) =>
+          this.fb.group({
+            jobType: new FormControl(val.jobType),
+            jobTypeGUID: new FormControl(val.jobTypeGUID),
+            startTime: new FormControl(val.startTime),
+            intervalMinutes: new FormControl(val.intervalMinutes),
+            scheduleStartDate: new FormControl(val.scheduleStartDate),
+            jobIsTimedOutMinutes: new FormControl(val.jobIsTimedOutMinutes),
+            stopTime: new FormControl(val.stopTime),
+            stopOnSuccessYN: new FormControl(val.stopOnSuccessYN),
+            activeYN: new FormControl(val.activeYN),
+            action: new FormControl('existingRecord'),
+            isEditable: new FormControl(true),
+            isNewRow: new FormControl(false),
+          })
+        )
+      ), //end of fb array
+    }); // end of form group c
+    this.dataSource = new MatTableDataSource(
+      (this.VOForm.get('VORows') as FormArray).controls
+    );
+
+    const filterPredicate = this.dataSource.filterPredicate;
+    this.dataSource.filterPredicate = (data: AbstractControl, filter) => {
+      return filterPredicate.call(this.dataSource, data.value, filter);
+    };
+
+    //Custom filter according to name column
+    // this.dataSource.filterPredicate = (data: {name: string}, filterValue: string) =>
+    //   data.name.trim().toLowerCase().indexOf(filterValue) !== -1;
+    console.log('Executing:  ngOnInit()');
+
+    // this.jobList = items;
+    // this.originalJobList = items;
+    // console.log(this.jobList);
+    // const count: number = items.length;
+    this.jobCount = ELEMENT_DATA.length;
+  }
+
+  EditSVO(VOFormElement: any, i: any) {
+    // VOFormElement.get('VORows').at(i).get('name').disabled(false)
+    VOFormElement.get('VORows').at(i).get('isEditable').patchValue(false);
+    // this.isEditableNew = true;
+  }
+
+  // On click of correct button in table (after click on edit) this method will call
+  SaveVO(VOFormElement: any, i: any) {
+    // alert('SaveVO')
+    VOFormElement.get('VORows').at(i).get('isEditable').patchValue(true);
+  }
+
+  // On click of cancel button in the table (after click on edit) this method will call and reset the previous data
+  CancelSVO(VOFormElement: any, i: any) {
+    VOFormElement.get('VORows').at(i).get('isEditable').patchValue(true);
+    this.ngOnInit();
+  }
+}
